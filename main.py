@@ -1,12 +1,10 @@
 import io
-
 from fastapi import FastAPI, File
 from typing_extensions import Annotated
 import tensorflow as tf
 import numpy as np
 from PIL import Image
 from numpy import asarray
-
 
 
 app = FastAPI()
@@ -23,15 +21,9 @@ def get_predict(model, X):
 
 
 def get_matrix(img):
-    image = Image.open(img).convert('L')
+    image = Image.open(img).convert('L').resize((28, 28), reducing_gap=2.0)
     as_array = asarray(image)
-    if np.size(as_array) == 78400:
-        matrix = as_array.reshape(280, 280, 1)
-        matrix = matrix.reshape(100, 784)
-    else:
-        matrix = as_array.reshape(28, 28, 1)
-        matrix = matrix.reshape(1, 784)
-    print(matrix)
+    matrix = as_array.reshape(1, 784)
     return matrix
 
 
